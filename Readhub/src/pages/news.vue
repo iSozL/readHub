@@ -1,6 +1,6 @@
 <template>
   <div class="pages">
-    <span v-for="item in List" style="float: left">
+    <span v-if="msg!=='jobs'" v-for="item in List" style="float: left">
       <div class="article">
         <div class="title">
           {{ item.title }}
@@ -19,35 +19,41 @@
         </div>
       </div>
     </span>
+    <span v-else v-for="(item, index) in List" style="float: left">
+      <div class="article">
+        <div class="title">
+          {{ item.jobTitle }}
+        </div>
+        <div class="summary">
+          {{ item.jobsArray}}
+        </div>
+        <div>
+          <span class="siteName">
+            {{ index }}
+          </span>
+          <span class="date">
+            {{ item.publishDate }}
+          </span>
+          <hr style="height: 0.0125rem; width: 38rem;">
+        </div>
+      </div>
+    </span>
     <sponsors></sponsors>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
   import sponsors from '../components/sponsors'
   export default {
     name: 'news',
-    data(){
-      return {
-        List: []
-      }
-    },
+    props: ['List', 'msg'],
     components: {
       sponsors
     },
     methods: {
-      getInfo: function () {
-        let _this = this;
-        axios.get('https://api.readhub.cn/blockchain/?lastCursor')
-          .then(this.getInfo2)
-      },
-      getInfo2: function (res) {
-        this.List = res.data.data
+      handleClick: function (msg) {
+        this.$emit('change', msg)
       }
-    },
-    mounted() {
-      this.getInfo()
     }
   }
 </script>

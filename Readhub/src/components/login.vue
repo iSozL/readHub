@@ -1,6 +1,8 @@
 <template>
-  <span class="login">
-    登录
+  <span>
+    <a class="login" href="https://passport.nocode.com/wechat?callback=https%3A%2F%2Freadhub.cn%2Fjobs&appname=readhub">
+      登录
+    </a>
   </span>
 </template>
 
@@ -17,4 +19,5 @@
     vertical-align top
     font-size 17px
     color #607d8b
+    text-decoration none
 </style>

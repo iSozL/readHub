@@ -2,44 +2,55 @@
   <div>
     <div class="header">
       <logo></logo>
-      <span class="nav">
-        <span class="nav-items">
-          <router-link to="/" exact tag="a">
-            热门话题
-          </router-link>
-          <router-link to="/dynamic" tag="a">
-            科技动态
-          </router-link>
-          <router-link to="/information" tag="a">
-            开发者资讯
-          </router-link>
-          <router-link to="/news" tag="a">
-            区块链快讯
-          </router-link>
-          <router-link to="/recruit" tag="a">
-            招聘详情
-          </router-link>
-        </span>
-      </span>
+      <items @change="getInfo"></items>
       <login></login>
     </div>
     <hr/>
-    <news></news>
+    <news :List="List" :msg="msg"></news>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   import logo from '../components/header-logo'
   import login from '../components/login'
   import news from '../pages/news.vue'
+  import items from '../components/header-items'
   export default {
     name: 'index',
     components: {
       logo,
       login,
-      news
+      news,
+      items
+    },
+    data() {
+      return {
+        List: [],
+        msg: '',
+        jobs:[]
+      }
+    },
+    methods: {
+      getInfo: function (msg) {
+        this.msg = msg
+        let _this = this;
+        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=&pageSize=10')
+          .then(this.getInfo2)
+      },
+      getInfo2: function (res) {
+        this.List = res.data.data
+      }
+    },
+    mounted() {
+        let _this = this;
+        axios.get('https://api.readhub.cn/topic?lastCursor=&pageSize=10')
+          .then(this.getInfo2)
+      },
+      getInfo2: function (res) {
+        this.List = res.data.data
+      }
     }
-  }
 </script>
 
 <style lang="stylus" scoped>
@@ -48,25 +59,4 @@
     height 3.87rem
     margin auto
     overflow hidden
-  .nav
-    margin-top 1.6rem
-    margin-left 1.5rem
-    display inline-block
-    height 2.3rem
-    vertical-align: top
-  .nav-items
-    width 32rem
-    display inline-flex
-    justify-content space-between
-    font-size 17px
-    color #607d8b
-    a
-      text-decoration none
-      color #607d8b
-    a:hover
-      font-weight bold
-      color #246394
-    a.router-link-exact-active
-      font-weight bold
-      color #246394
 </style>
