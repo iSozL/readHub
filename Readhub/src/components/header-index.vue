@@ -24,17 +24,20 @@
       <login></login>
     </div>
     <hr/>
+    <news></news>
   </div>
 </template>
 
 <script>
   import logo from '../components/header-logo'
   import login from '../components/login'
+  import news from '../pages/news.vue'
   export default {
     name: 'index',
     components: {
       logo,
-      login
+      login,
+      news
     }
   }
 </script>

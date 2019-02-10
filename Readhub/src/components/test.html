@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+  </style>
+</head>
+<body>
+  <div id="app">
+      <img style="border-color: red" border="1" src="http://b.hiphotos.baidu.com/image/h%3D300/sign=947aaa099c2397ddc9799e046983b216/0823dd54564e9258204b15009182d158cdbf4ee5.jpg">
+  </div>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      info:[]
+    },
+    mounted: function () {
+      let _this = this
+      axios.get('https://api.readhub.cn/topic?lastCursor=&pageSize=20')
+        .then(function (response) {
+          _this.list = response.data.data
+          console.log(response.data.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  })
+</script>
+</body>
+</html>
