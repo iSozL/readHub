@@ -33,19 +33,20 @@
     },
     methods: {
       getInfo: function (msg) {
-        this.msg = msg
+        this.msg = msg;
         let _this = this;
-        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=&pageSize=10')
+        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=&pageSize=200')
           .then(this.getInfo2)
       },
       getInfo2: function (res) {
-        this.List = res.data.data
+        let _this = this;
+        _this.List = res.data.data;
       }
     },
     mounted() {
-        let _this = this;
-        axios.get('https://api.readhub.cn/topic?lastCursor=&pageSize=10')
-          .then(this.getInfo2)
+      let _this = this;
+      axios.get('https://api.readhub.cn/topic?lastCursor=&pageSize=100')
+        .then(this.getInfo2)
       },
       getInfo2: function (res) {
         this.List = res.data.data

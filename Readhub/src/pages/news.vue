@@ -1,54 +1,61 @@
 <template>
   <div class="pages">
-    <span v-if="msg!=='jobs'" v-for="item in List" style="float: left">
-      <div class="article">
-        <div class="title">
-          {{ item.title }}
+    <div v-if="msg!=='jobs'">
+      <span v-for="item of List" style="float: left">
+        <div class="article">
+          <div class="title">
+            {{ item.title }}
+          </div>
+          <div class="summary" key="others">
+            {{ item.summary }}
+          </div>
+          <div>
+            <span class="siteName">
+              {{ item.siteName }}
+            </span>
+            <span class="date">
+            </span>
+            <hr style="height: 0.0125rem; width: 38rem;">
+          </div>
         </div>
-        <div class="summary">
-          {{ item.summary }}
+      </span>
+      <sponsors></sponsors>
+    </div>
+      <div v-else>
+      <span v-for="item of List" style="float: left">
+        <div class="article">
+          <div class="title">
+            {{ item.jobTitle }}
+          </div>
+          <div class="summary" v-if="item.jobsArray!==undefined">
+            {{ item.jobsArray[0].title }} ·
+            {{ item.jobsArray[1].title }} ·
+            {{ item.jobsArray[2].title }} ·
+            {{ item.jobsArray[3].title }}
+          </div>
+          <div>
+            <span class="siteName" v-if="item.cities!==undefined">
+              {{ Object.keys(item.cities)[0] }}、{{ Object.keys(item.cities)[1] }}等地共更新
+              {{ item.jobCount }} 个职位,待遇集中在 {{ item.salaryLower }}-{{ item.salaryUpper }} k，
+              一般要求 {{ item.experienceLower }}-{{ item.experienceUpper }} 年经验
+            </span>
+            <hr style="height: 0.0125rem; width: 38rem;">
+          </div>
         </div>
-        <div>
-          <span class="siteName">
-            {{ item.siteName }}
-          </span>
-          <span class="date">
-            {{ item.publishDate }}
-          </span>
-          <hr style="height: 0.0125rem; width: 38rem;">
-        </div>
-      </div>
-    </span>
-    <span v-else v-for="(item, index) in List" style="float: left">
-      <div class="article">
-        <div class="title">
-          {{ item.jobTitle }}
-        </div>
-        <div class="summary">
-          {{ item.jobsArray}}
-        </div>
-        <div>
-          <span class="siteName">
-            {{ index }}
-          </span>
-          <span class="date">
-            {{ item.publishDate }}
-          </span>
-          <hr style="height: 0.0125rem; width: 38rem;">
-        </div>
-      </div>
-    </span>
-    <sponsors></sponsors>
+      </span>
+      <brief></brief>
+    </div>
   </div>
 </template>
 
 <script>
   import sponsors from '../components/sponsors'
+  import brief from '../components/brief'
   export default {
     name: 'news',
     props: ['List', 'msg'],
     components: {
-      sponsors
+      sponsors, brief
     },
     methods: {
       handleClick: function (msg) {
