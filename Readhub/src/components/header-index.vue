@@ -5,8 +5,9 @@
       <items @change="getInfo"></items>
       <login></login>
     </div>
-    <hr/>
-    <news :List="List" :msg="msg"></news>
+    <div>
+     <news :List="List" :msg="msg"></news>
+    </div>
   </div>
 </template>
 
@@ -28,14 +29,16 @@
       return {
         List: [],
         msg: '',
-        jobs:[]
+        jobs:[],
+        timestamp: ''
       }
     },
     methods: {
       getInfo: function (msg) {
+        this.timestamp = Date.parse(new Date());
         this.msg = msg;
         let _this = this;
-        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=&pageSize=200')
+        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=' + this.timestamp + '&pageSize=100')
           .then(this.getInfo2)
       },
       getInfo2: function (res) {
