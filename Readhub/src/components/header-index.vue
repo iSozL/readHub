@@ -6,7 +6,10 @@
       <login></login>
     </div>
     <div>
-     <news :List="List" :msg="msg"></news>
+      <news :List="List" :msg="msg"></news>
+      <div v-show="!loading">
+        Loading。。。。。。
+      </div>
     </div>
   </div>
 </template>
@@ -17,44 +20,112 @@
   import login from '../components/login'
   import news from '../pages/news.vue'
   import items from '../components/header-items'
+
   export default {
     name: 'index',
     components: {
       logo,
       login,
       news,
-      items
+      items,
     },
     data() {
       return {
         List: [],
         msg: '',
         jobs:[],
-        timestamp: ''
+        timestamp: '',
+        loading: true
       }
     },
     methods: {
-      getInfo: function (msg) {
-        this.timestamp = Date.parse(new Date());
-        this.msg = msg;
-        let _this = this;
-        axios.get('https://api.readhub.cn/' + msg + '?lastCursor=' + this.timestamp + '&pageSize=100')
-          .then(this.getInfo2)
+      getInfo (msg) {
+        this.msg = msg
+        //获取msg实现数据分类
+        this.timestamp = Date.parse(new Date())
+        axios.get('https://api.readhub.cn/'
+          + this.msg + '?lastCursor='
+          + this.timestamp
+          + '&pageSize=10')
+          .then(res => {
+            if (res.status === 200) {
+              this.List = res.data.data
+            }
+          }).catch((error) => {
+          console.log(error)
+        })
       },
-      getInfo2: function (res) {
-        let _this = this;
-        _this.List = res.data.data;
+
+      //获取更多数据
+      scroll () {
+        let marginBot = 0;
+        //判断滚动条是否滑到底部
+        if (document.documentElement.scrollTop){
+          marginBot = document.documentElement.scrollHeight
+            - (document.documentElement.scrollTop+document.body.scrollTop)
+            -document.documentElement.clientHeight;
+        } else {
+          marginBot = document.body.scrollHeight
+            - document.body.scrollTop
+            - document.body.clientHeight;
+        }
+
+        //如果滑到底层,获取更多数据
+        if(marginBot<=0) {
+          this.load()
+          this.loading = false
+        }
+      },
+
+      load () {
+        if (this.loading) {
+          if (this.msg!=='topic') {
+            //获取时间戳并转化为毫秒
+            let time = JSON.stringify(this.List[this.List.length-1].publishDate)
+            let b = JSON.parse(time)
+            let d = new Date(b)
+            let times = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+            this.timestamp = Date.parse(times)
+            axios.get('https://api.readhub.cn/'
+              + this.msg + '?lastCursor='
+              + this.timestamp
+              + '&pageSize=10')
+              .then(res => {
+                if (res.status === 200) {
+                  this.List = [...this.List, ...res.data.data]
+                  this.loading = true
+                }
+              }).catch((error) => {
+              console.log(error)
+              this.loading = true
+            })
+          } else {
+            axios.get('https://api.readhub.cn/'
+              + this.msg + '?lastCursor='
+              + this.List[this.List.length-1].order
+              + '&pageSize=10')
+              .then(res => {
+                if (res.status === 200) {
+                  this.List = [...this.List, ...res.data.data]
+                  this.loading = true
+                }
+              }).catch((error) => {
+              console.log(error)
+              this.loading = true
+            })
+          }
+        }
       }
     },
+    created () {
+      this.getInfo
+    },
+
     mounted() {
-      let _this = this;
-      axios.get('https://api.readhub.cn/topic?lastCursor=&pageSize=100')
-        .then(this.getInfo2)
-      },
-      getInfo2: function (res) {
-        this.List = res.data.data
-      }
+      this.getInfo('topic')
+      window.onscroll = this.scroll
     }
+  }
 </script>
 
 <style lang="stylus" scoped>

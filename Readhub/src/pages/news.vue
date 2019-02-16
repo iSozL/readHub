@@ -4,7 +4,10 @@
     <div class="pages">
       <span v-for="item of List" style="float: left">
         <div class="article">
-          <span class="title">
+          <span class="title" v-if="item.url !== undefined">
+            <a :href='item.url' target="_blank">{{ item.title }}</a>
+          </span>
+          <span class="title" v-else>
             {{ item.title }}
           </span>
           <div class="summary" key="others">
@@ -64,8 +67,13 @@
   export default {
     name: 'news',
     props: ['List', 'msg'],
+    data() {
+      return {
+      }
+    },
     components: {
-      sponsors, brief
+      sponsors,
+      brief,
     },
     methods: {
       handleClick: function (msg) {
@@ -76,6 +84,11 @@
 </script>
 
 <style lang="stylus" scoped>
+  a:hover
+    text-decoration underline
+  a
+    text-decoration none
+    color black
   .pages
     width 60.6rem
     margin auto

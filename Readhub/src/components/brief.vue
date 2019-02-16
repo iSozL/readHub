@@ -33,10 +33,9 @@
     },
     methods: {
       getInfo3: function (msg) {
-        this.timestamp = Date.parse(new Date())
         this.msg = msg;
         let _this = this;
-        axios.get('https://api.readhub.cn/jobs/brief?lastCursor=' + this.timestamp + '&pageSize=20')
+        axios.get('https://api.readhub.cn/jobs/brief?lastCursor=&pageSize=')
           .then(this.getInfo4)
       },
       getInfo4: function (res) {
