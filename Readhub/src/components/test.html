@@ -1,0 +1,56 @@
+
+<html>
+
+<head>
+
+  <meta charset="gb2312">
+  <title>隐藏和显示</title>
+  <style type="text/css">
+    #thediv
+    {
+      width:200px;
+      height:100px;
+      line-height:100px;
+      text-align:center;
+      background-color:green;
+    }
+    .color
+    {
+      width:200px;
+      height:100px;
+      line-height:100px;
+      text-align:center;
+      background-color:green;
+    }
+  </style>
+  <script type="text/javascript">
+    function Show_Hidden(obj)
+    {
+      if(obj.style.display=="block")
+      {
+        obj.style.display='none';
+      }
+      else
+      {
+        obj.style.display='block';
+      }
+    }
+    window.onload=function()
+    {
+      let olink=document.getElementById("link");
+      let odiv=document.getElementById("thediv");
+      olink.onclick=function()
+      {
+        Show_Hidden(odiv);
+        return false;
+      }
+    }
+  </script>
+</head>
+<body>
+<div id="link" class="color" >2112</div>
+<div id="thediv" style="display:block">欢迎您</div>
+<div>1231321312</div>
+<div>321</div>
+</body>
+</html>
