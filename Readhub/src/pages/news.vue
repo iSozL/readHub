@@ -190,6 +190,7 @@
     line-height 1.5rem
     margin-bottom .7rem
     margin-left 1.3rem
+    margin-right .5rem
   .job-siteName
     font-size 16px
     color rgba(0, 0, 0, .65)
